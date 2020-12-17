@@ -44,17 +44,7 @@ public class PropertiesResource {
 
     @GET
     @Path("asyncresponse")
-    @Trace(dispatcher = true)
     public void getPropertiesAsyncResponse(@Suspended final AsyncResponse asyncResponse) {
-        final Token token = NewRelic.getAgent().getTransaction().getToken();
-        asyncResponse.resume(computeProperties(token));
-        token.expire();
-    }
-
-
-    @Trace(async = true)
-    private Properties computeProperties(Token token) {
-        token.link();
-        return System.getProperties();
+        asyncResponse.resume(System.getProperties());
     }
 }
