@@ -12,54 +12,74 @@
 // end::comment[]
 package io.openliberty.guides.rest;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.Properties;
+import java.nio.charset.Charset;
 import java.util.concurrent.CompletableFuture;
 
 @Path("external")
 public class ExternalCallResource {
 
+    private static String SERVICE_URL = "http://localhost:8080/hello-resteasy/wait";
+
+    @Inject
+    private CloseableHttpClient client;
+
+    @Inject
+    private PoolingHttpClientConnectionManager connectionManager;
+
+    @Inject
+    private PoolingNHttpClientConnectionManager asyncConnectionManager;
+
+    @Inject
+    private CloseableHttpAsyncClient asyncClient;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getExternalResource() throws IOException {
+    public String getExternalResource(@QueryParam("wait") long wait) throws IOException {
 
-        CloseableHttpClient client = HttpClients.createDefault();
-
-        HttpUriRequest get = new HttpGet("https://www.google.com");
+        HttpUriRequest get = new HttpGet(SERVICE_URL + "?wait=" + wait);
 
         CloseableHttpResponse response = client.execute(get);
 
-        return response.getStatusLine().toString();
+        String statusLine = response.getStatusLine().toString() + " : " + IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset());
+
+        response.close();
+
+        System.out.println(connectionManager.getTotalStats());
+
+        return statusLine;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("async")
-    public CompletableFuture<String> getExternalResourceAsync() {
+    public CompletableFuture<String> getExternalResourceAsync(@QueryParam("wait") long wait) {
 
-        CloseableHttpAsyncClient client = HttpAsyncClients.createDefault();
-
-        HttpUriRequest get = new HttpGet("https://www.google.com");
+        HttpUriRequest get = new HttpGet(SERVICE_URL + "?wait=" + wait);
 
         CompletableFuture<String> res = new CompletableFuture<>();
 
-        client.execute(get, new FutureCallback<HttpResponse>() {
+        asyncClient.execute(get, new FutureCallback<HttpResponse>() {
             @Override
             public void completed(HttpResponse response) {
+                System.out.println(asyncConnectionManager.getTotalStats());
                 res.complete(response.getStatusLine().toString());
             }
 

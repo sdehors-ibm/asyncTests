@@ -14,16 +14,9 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <!-- Liberty configuration -->
-        <!-- tag::defaultHttpPort[] -->
         <liberty.var.default.http.port>9080</liberty.var.default.http.port>
-        <!-- end::defaultHttpPort[] -->
-        <!-- tag::defaultHttpsPort[] -->
         <liberty.var.default.https.port>9443</liberty.var.default.https.port>
-        <!-- end::defaultHttpsPort[] -->
-        <!-- tag::appContextRoot[] -->
         <liberty.var.app.context.root>LibertyProject</liberty.var.app.context.root>
-        <!-- end::appContextRoot[] -->
     </properties>
 
     <dependencies>
@@ -35,6 +28,12 @@
         </dependency>
 
         <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.newrelic.agent.java</groupId>
             <artifactId>newrelic-api</artifactId>
             <version>6.2.1</version>
@@ -42,9 +41,23 @@
 
         <!-- Provided dependencies for jax-rs annotations-->
         <dependency>
-            <groupId>jakarta.platform</groupId>
-            <artifactId>jakarta.jakartaee-api</artifactId>
-            <version>8.0.0</version>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.1.1</version>
             <scope>provided</scope>
         </dependency>
 
