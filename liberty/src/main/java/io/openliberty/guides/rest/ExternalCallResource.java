@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.CompletableFuture;
 
-@Path("external")
+@Path("external/apache")
 public class ExternalCallResource {
 
     private static String SERVICE_URL = "http://localhost:8080/hello-resteasy/wait";
@@ -62,7 +62,7 @@ public class ExternalCallResource {
 
         response.close();
 
-        System.out.println(connectionManager.getTotalStats());
+        //System.out.println(connectionManager.getTotalStats());
 
         return statusLine;
     }
@@ -79,7 +79,7 @@ public class ExternalCallResource {
         asyncClient.execute(get, new FutureCallback<HttpResponse>() {
             @Override
             public void completed(HttpResponse response) {
-                System.out.println(asyncConnectionManager.getTotalStats());
+                //System.out.println(asyncConnectionManager.getTotalStats());
                 res.complete(response.getStatusLine().toString());
             }
 

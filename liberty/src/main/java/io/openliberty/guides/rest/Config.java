@@ -1,11 +1,9 @@
 package io.openliberty.guides.rest;
 
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpRequestInterceptor;
+import okhttp3.OkHttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
-import org.apache.http.config.SocketConfig;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
@@ -23,6 +21,9 @@ import org.apache.http.nio.reactor.IOReactorException;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.Configuration;
 
 @ApplicationScoped
 public class Config {
@@ -95,4 +96,16 @@ public class Config {
             .build();
     }
 
+
+    @Produces
+    @Singleton
+    public OkHttpClient okHttpClient() {
+        return new OkHttpClient();
+    }
+
+    @Produces
+    @Singleton
+    public Client jaxrsClient() {
+        return ClientBuilder.newClient();
+    }
 }

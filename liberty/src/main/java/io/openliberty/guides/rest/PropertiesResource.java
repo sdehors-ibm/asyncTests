@@ -12,13 +12,10 @@
 // end::comment[]
 package io.openliberty.guides.rest;
 
-import com.newrelic.api.agent.NewRelic;
-import com.newrelic.api.agent.Token;
-import com.newrelic.api.agent.Trace;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
@@ -30,6 +27,14 @@ import java.util.concurrent.CompletableFuture;
 public class PropertiesResource {
 
     @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("wait")
+    public String waiting(@QueryParam("wait") long wait) throws InterruptedException {
+        Thread.sleep(wait);
+        return "waited " + wait + " ms";
+    }
+
+    @GET
     @Path("sync")
     public Properties getProperties() {
         return System.getProperties();
@@ -38,23 +43,17 @@ public class PropertiesResource {
     @GET
     @Path("async")
     public CompletableFuture<Properties> getPropertiesAsync() {
-        return CompletableFuture.completedFuture(System.getProperties());
+        return CompletableFuture.completedFuture(computeProperties());
     }
-
 
     @GET
     @Path("asyncresponse")
-    @Trace(dispatcher = true)
     public void getPropertiesAsyncResponse(@Suspended final AsyncResponse asyncResponse) {
-        final Token token = NewRelic.getAgent().getTransaction().getToken();
-        asyncResponse.resume(computeProperties(token));
-        token.expire();
+        asyncResponse.resume(computeProperties());
     }
 
 
-    @Trace(async = true)
-    private Properties computeProperties(Token token) {
-        token.link();
+    private Properties computeProperties() {
         return System.getProperties();
     }
 }
