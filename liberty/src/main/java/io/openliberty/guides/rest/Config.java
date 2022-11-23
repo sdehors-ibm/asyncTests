@@ -24,6 +24,7 @@ import javax.inject.Singleton;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Configuration;
+import java.net.http.HttpClient;
 
 @ApplicationScoped
 public class Config {
@@ -108,4 +109,11 @@ public class Config {
     public Client jaxrsClient() {
         return ClientBuilder.newClient();
     }
+
+    @Produces
+    @Singleton
+    public HttpClient javaClient() {
+        return HttpClient.newBuilder().build();
+    }
+
 }

@@ -13,10 +13,13 @@
     <artifactId>liberty</artifactId>
     <packaging>war</packaging>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>io.opentelemetry.javaagent.instrumentation</groupId>
+            <artifactId>opentelemetry-javaagent-apache-httpasyncclient-4.1</artifactId>
+            <version>1.20.1-alpha</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -53,6 +56,14 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

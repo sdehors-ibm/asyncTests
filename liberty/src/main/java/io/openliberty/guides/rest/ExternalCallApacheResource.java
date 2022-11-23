@@ -28,6 +28,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -96,6 +98,30 @@ public class ExternalCallApacheResource {
 
         return res;
     }
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("asyncresponse")
+    public void getExternalResourceAsync(@QueryParam("wait") long wait,@Suspended AsyncResponse asyncResponse) {
 
+        HttpUriRequest get = new HttpGet(SERVICE_URL + "?wait=" + wait);
+
+        asyncClient.execute(get, new FutureCallback<>() {
+            @Override
+            public void completed(HttpResponse response) {
+                //System.out.println(asyncConnectionManager.getTotalStats());
+                asyncResponse.resume(response.getStatusLine().toString());
+            }
+
+            @Override
+            public void failed(Exception ex) {
+                asyncResponse.resume(ex);
+            }
+
+            @Override
+            public void cancelled() {
+                asyncResponse.cancel();
+            }
+        });
+    }
 
 }
