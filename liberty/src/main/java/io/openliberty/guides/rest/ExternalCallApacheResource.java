@@ -34,7 +34,7 @@ import java.nio.charset.Charset;
 import java.util.concurrent.CompletableFuture;
 
 @Path("external/apache")
-public class ExternalCallResource {
+public class ExternalCallApacheResource {
 
     private static String SERVICE_URL = "http://localhost:8080/hello-resteasy/wait";
 
