@@ -27,7 +27,7 @@
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">9080</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
-          <stringProp name="HTTPSampler.path">hello-resteasy/wait?wait=500</stringProp>
+          <stringProp name="HTTPSampler.path">external/java/virtual?wait=2000</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -45,7 +45,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree/>
-        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
+        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -79,7 +79,7 @@
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename"></stringProp>
+          <stringProp name="filename">/Users/sdehors/Clones/asyncTests/results/summary.jmx</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
@@ -116,7 +116,7 @@
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename"></stringProp>
+          <stringProp name="filename">/Users/sdehors/Clones/asyncTests/results/resultTree.jmx</stringProp>
         </ResultCollector>
         <hashTree/>
         <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results">
@@ -153,10 +153,10 @@
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename"></stringProp>
+          <stringProp name="filename">/Users/sdehors/Clones/asyncTests/results/graphresult.jmx</stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="RespTimeGraphVisualizer" testclass="ResultCollector" testname="Async response time ">
+        <ResultCollector guiclass="RespTimeGraphVisualizer" testclass="ResultCollector" testname="response time ">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -190,8 +190,8 @@
               <connectTime>true</connectTime>
             </value>
           </objProp>
-          <stringProp name="filename"></stringProp>
-          <stringProp name="RespTimeGraph.interval">500</stringProp>
+          <stringProp name="filename">/Users/sdehors/Clones/asyncTests/results/responseTime.jmx</stringProp>
+          <stringProp name="RespTimeGraph.interval">100</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>

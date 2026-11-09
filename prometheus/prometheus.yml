@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 5s
+  scrape_timeout: 4s
+
+scrape_configs:
+  # Liberty runs on the host (not in Docker); host.docker.internal resolves to the host.
+  - job_name: liberty
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets: ["host.docker.internal:9080"]
+
+  # OS-level memory of the Liberty process (collector/process_exporter.py, runs on the host).
+  - job_name: liberty-process
+    static_configs:
+      - targets: ["host.docker.internal:9101"]

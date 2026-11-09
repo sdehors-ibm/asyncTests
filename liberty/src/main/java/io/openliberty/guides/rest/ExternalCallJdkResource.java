@@ -22,15 +22,14 @@ import java.util.concurrent.Executors;
 @Path("external/java")
 public class ExternalCallJdkResource {
 
-    private static String SERVICE_URL = "http://localhost:8080/hello-resteasy/wait";
+    private static final String SERVICE_URL = "http://localhost:8080/hello-resteasy/wait";
 
     @Inject
     private HttpClient client;
 
-    private HttpClient virtualClient = HttpClient.newBuilder()
+    private final HttpClient virtualClient = HttpClient.newBuilder()
             .executor(Executors.newVirtualThreadPerTaskExecutor())
             .build();
-
 
 
     @GET
@@ -44,13 +43,12 @@ public class ExternalCallJdkResource {
 
         HttpResponse<String> response = client.send(get, BodyHandlers.ofString());
 
-        String statusLine = response.statusCode() + " : " + response.body();
-
-        return statusLine;
+        return response.statusCode() + " : " + response.body();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("virtual")
     public String getExternalResourceVirtual(@QueryParam("wait") long wait) throws IOException, URISyntaxException, InterruptedException {
 
         HttpRequest get = HttpRequest.newBuilder()
@@ -58,11 +56,9 @@ public class ExternalCallJdkResource {
                 .GET()
                 .build();
 
-        HttpResponse<String> response = client.send(get, BodyHandlers.ofString());
+        HttpResponse<String> response = virtualClient.send(get, BodyHandlers.ofString());
 
-        String statusLine = response.statusCode() + " : " + response.body();
-
-        return statusLine;
+        return response.statusCode() + " : " + response.body();
     }
 
     @GET
@@ -71,7 +67,7 @@ public class ExternalCallJdkResource {
     public CompletableFuture<String> getExternalResourceAsync(@QueryParam("wait") long wait) throws URISyntaxException {
 
         HttpRequest get = HttpRequest.newBuilder()
-                .uri(new URI("https://github.com"))
+                .uri(new URI(SERVICE_URL + "?wait=" + wait))
                 .GET()
                 .build();
 

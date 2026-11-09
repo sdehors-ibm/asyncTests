@@ -1,0 +1,25 @@
+services:
+  prometheus:
+    # Official Prometheus image (CNCF project, published on quay.io), pinned to the latest stable release.
+    image: quay.io/prometheus/prometheus:v3.16.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=7d
+    ports:
+      - "127.0.0.1:9090:9090"   # UI/API reachable from this machine only
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    user: "65534:65534"          # nobody, non-root
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+volumes:
+  prometheus-data:

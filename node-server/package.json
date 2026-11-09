@@ -1,0 +1,14 @@
+{
+  "name": "wait-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Replies to /hello-resteasy/wait after the number of ms given in the wait parameter",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "Apache-2.0"
+}
