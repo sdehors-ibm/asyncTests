@@ -1,2 +1,2 @@
--javaagent:/Users/sdehors/Clones/asyncTests/liberty/target/opentelemetry-javaagent-1.20.1.jar
+-javaagent:/Users/sdehors/Clones/asyncTests/liberty/target/opentelemetry-javaagent-2.33.1.jar
 

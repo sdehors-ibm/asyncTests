@@ -1,13 +1,14 @@
 package io.openliberty.guides.rest;
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.container.Suspended;
-import javax.ws.rs.core.MediaType;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.container.AsyncResponse;
+import jakarta.ws.rs.container.Suspended;
+import jakarta.ws.rs.core.MediaType;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -15,20 +16,42 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.nio.charset.Charset;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 
 @Path("external/java")
-public class ExternalCallJava11Resource {
+public class ExternalCallJdkResource {
 
     private static String SERVICE_URL = "http://localhost:8080/hello-resteasy/wait";
 
     @Inject
     private HttpClient client;
 
+    private HttpClient virtualClient = HttpClient.newBuilder()
+            .executor(Executors.newVirtualThreadPerTaskExecutor())
+            .build();
+
+
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getExternalResource(@QueryParam("wait") long wait) throws IOException, URISyntaxException, InterruptedException {
+
+        HttpRequest get = HttpRequest.newBuilder()
+                .uri(new URI(SERVICE_URL + "?wait=" + wait))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(get, BodyHandlers.ofString());
+
+        String statusLine = response.statusCode() + " : " + response.body();
+
+        return statusLine;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getExternalResourceVirtual(@QueryParam("wait") long wait) throws IOException, URISyntaxException, InterruptedException {
 
         HttpRequest get = HttpRequest.newBuilder()
                 .uri(new URI(SERVICE_URL + "?wait=" + wait))

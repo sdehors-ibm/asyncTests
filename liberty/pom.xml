@@ -3,21 +3,56 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>guide-rest-intro</artifactId>
-        <groupId>io.openliberty.guides</groupId>
+        <artifactId>asyncTests</artifactId>
+        <groupId>sdehors.asyncdemo</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.sdehors.asyncdemo</groupId>
     <artifactId>liberty</artifactId>
     <packaging>war</packaging>
 
+    <properties>
+        <liberty.version>26.0.0.11</liberty.version>
+    </properties>
+
     <dependencies>
+
+        <dependency>
+            <groupId>io.openliberty.features</groupId>
+            <artifactId>cdi-4.0</artifactId>
+            <version>${liberty.version}</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.openliberty.features</groupId>
+            <artifactId>restfulWS-3.1</artifactId>
+            <version>${liberty.version}</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpasyncclient</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp-jvm</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>io.opentelemetry.javaagent.instrumentation</groupId>
             <artifactId>opentelemetry-javaagent-apache-httpasyncclient-4.1</artifactId>
-            <version>1.20.1-alpha</version>
+            <version>2.33.1-alpha</version>
         </dependency>
     </dependencies>
 
@@ -26,16 +61,25 @@
             <plugin>
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
-                <version>3.7.1</version>
+                <version>3.12.5</version>
+                <configuration>
+                    <runtimeArtifact>
+                        <groupId>io.openliberty</groupId>
+                        <artifactId>openliberty-runtime</artifactId>
+                        <version>${liberty.version}</version>
+                        <type>zip</type>
+                    </runtimeArtifact>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>3.3.2</version>
+                <version>3.5.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.11.0</version>
                 <executions>
                     <execution>
                         <id>install-telemetry</id>
@@ -49,7 +93,7 @@
                                 <artifactItem>
                                     <groupId>io.opentelemetry.javaagent</groupId>
                                     <artifactId>opentelemetry-javaagent</artifactId>
-                                    <version>1.20.1</version>
+                                    <version>2.33.1</version>
                                     <type>jar</type>
                                 </artifactItem>
                             </artifactItems>
@@ -60,9 +104,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.15.0</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>25</source>
+                    <target>25</target>
                 </configuration>
             </plugin>
         </plugins>

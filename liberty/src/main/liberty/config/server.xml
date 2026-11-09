@@ -1,16 +1,16 @@
 <server description="Sample Liberty server">
     <featureManager>
-        <feature>cdi-2.0</feature>
-        <feature>jaxrs-2.1</feature>
-        <feature>jsonb-1.0</feature>
-        <feature>mpMetrics-3.0</feature>
-        <feature>mpOpenAPI-2.0</feature>
+        <feature>cdi-4.0</feature>
+        <feature>restfulWS-3.1</feature>
+        <feature>jsonb-3.0</feature>
+        <feature>mpMetrics-5.1</feature>
+        <feature>mpOpenAPI-4.1</feature>
     </featureManager>
 
     <variable name="default.http.port" defaultValue="9080"/>
     <variable name="default.https.port" defaultValue="9443"/>
 
-    <webApplication location="guide-getting-started.war" contextRoot="/" />
+    <webApplication location="liberty-1.0-SNAPSHOT.war" contextRoot="/" />
 
     <mpMetrics authentication="false"/>
 
